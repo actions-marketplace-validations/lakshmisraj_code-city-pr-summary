@@ -73,3 +73,7 @@ history-days: 365         # how much history counts
 | `config` | `.codecity.yml` | Path of the settings file |
 | `site` | `https://code-city-lakshmi.netlify.app` | Code City site the comment links to |
 | `github-token` | the workflow's token | Token used to post the comment |
+
+## License
+
+MIT. See [LICENSE](LICENSE).
