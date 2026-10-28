@@ -1,5 +1,5 @@
 name: Code City PR summary
-description: "Comments on each pull request with the hotspots and owners of the files it touches, and a link to see it in Code City's 3D view."
+description: "Comments on each pull request with hotspots, missing tests and who to ask, plus a link to see it in Code City's 3D view."
 author: Lakshmi Shibu Raj
 branding:
   icon: map
