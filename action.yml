@@ -24,7 +24,13 @@ runs:
   using: composite
   steps:
     - shell: bash
-      run: python3 "${{ github.action_path }}/action/pr_comment.py"
+      # Never fail the build: without Python 3.7+ on the runner, warn and skip.
+      run: |
+        if ! command -v python3 >/dev/null || ! python3 -c 'import sys; sys.exit(sys.version_info < (3, 7))'; then
+          echo "::warning::Code City summary skipped: it needs Python 3.7 or newer on the runner (add actions/setup-python)."
+          exit 0
+        fi
+        python3 "${{ github.action_path }}/action/pr_comment.py"
       env:
         GITHUB_TOKEN: ${{ inputs.github-token }}
         CODE_CITY_QUIET: ${{ inputs.quiet }}
