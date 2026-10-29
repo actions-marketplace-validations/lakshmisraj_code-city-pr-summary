@@ -215,11 +215,26 @@ def github(method, url, token, body=None):
         return json.loads(r.read() or b"null")
 
 
+def own_login(api, token):
+    """The account our comments are posted as. The workflow's own token can't read /user, and posts as
+    github-actions[bot]; a personal token posts as its owner."""
+    try:
+        return github("GET", f"{api}/user", token)["login"]
+    except Exception:
+        return "github-actions[bot]"
+
+
 def post(repo, number, body, token, only_update=False):
     """Post the comment, or update our earlier one. With only_update, never start a new comment."""
     api = os.environ.get("GITHUB_API_URL", "https://api.github.com")
-    comments = github("GET", f"{api}/repos/{repo}/issues/{number}/comments?per_page=100", token)
-    mine = next((c for c in comments if MARKER in (c.get("body") or "")), None)
+    me = own_login(api, token)
+    mine = None
+    for page in range(1, 51):   # every page of comments, so a long discussion can't hide our earlier one
+        comments = github("GET", f"{api}/repos/{repo}/issues/{number}/comments?per_page=100&page={page}", token)
+        # Only our own account's comment counts: anyone can paste the marker into a comment of theirs.
+        mine = next((c for c in comments if (c.get("user") or {}).get("login") == me and (c.get("body") or "").startswith(MARKER)), None)
+        if mine or len(comments) < 100:
+            break
     if mine:
         github("PATCH", f"{api}/repos/{repo}/issues/comments/{mine['id']}", token, {"body": body})
         print(f"Updated Code City comment on #{number}")
