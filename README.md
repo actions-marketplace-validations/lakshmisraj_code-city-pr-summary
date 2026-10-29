@@ -5,7 +5,7 @@ A GitHub Action that comments on each pull request with what reviewers should kn
 - **Hotspots:** files in the repo's top 10% for how often they change. Bugs tend to cluster in them.
 - **Missing tests:** code changed but no test files did (only in repos that have tests).
 - **Who to ask:** files that only one other person has changed recently. It never suggests the PR's own author (matched by name, email and GitHub login) or bots like Dependabot.
-- **A link to see the PR in [Code City](https://code-city-lakshmi.netlify.app)**, a 3D view of the codebase with the PR's files lit up.
+- **A link to see the PR in [Code City](https://code-city-view.netlify.app)**, a 3D view of the codebase with the PR's files lit up.
 
 It runs in your repo's own GitHub Actions, so your code never leaves GitHub. The only thing that points outside GitHub is the Code City link in the comment, which carries the repo name and PR number when someone clicks it (set `site` to change where it goes). It posts one comment and updates it on later pushes, and it never fails a build.
 
@@ -79,7 +79,7 @@ history-days: 365         # how much history counts
 | `quiet` | from `.codecity.yml` | `true` to comment only when something is worth flagging |
 | `history-days` | from `.codecity.yml` (365) | How many days of history count towards hotspots and owners |
 | `config` | `.codecity.yml` | Path of the settings file |
-| `site` | `https://code-city-lakshmi.netlify.app` | Code City site the comment links to |
+| `site` | `https://code-city-view.netlify.app` | Code City site the comment links to |
 | `github-token` | the workflow's token | Token used to post the comment |
 
 ## License

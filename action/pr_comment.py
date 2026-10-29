@@ -381,7 +381,7 @@ def main():
         return
     repo, number = os.environ["GITHUB_REPOSITORY"], pr["number"]
     base, head = pr["base"]["sha"], pr["head"]["sha"]
-    site = os.environ.get("CODE_CITY_SITE") or "https://code-city-lakshmi.netlify.app"
+    site = os.environ.get("CODE_CITY_SITE") or "https://code-city-view.netlify.app"
     head_repo = ((pr.get("head") or {}).get("repo") or {}).get("full_name")
     from_fork = bool(head_repo) and head_repo != repo
 

@@ -19,7 +19,7 @@ inputs:
     default: ".codecity.yml"
   site:
     description: "Code City site the comment links to."
-    default: https://code-city-lakshmi.netlify.app
+    default: https://code-city-view.netlify.app
 runs:
   using: composite
   steps:
