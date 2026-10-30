@@ -147,7 +147,10 @@ def glob_regex(pattern):
             out += "[^/]"; i += 1
         elif p[i] == "[" and "]" in p[i + 1:]:
             j = p.index("]", i + 1)
-            out += "[" + p[i + 1:j].replace("\\", "\\\\").replace("!", "^", 1) + "]"; i = j + 1
+            body = p[i + 1:j].replace("\\", "\\\\")
+            if body.startswith("!"):   # only a leading ! negates a class, as in .gitignore
+                body = "^" + body[1:]
+            out += "[" + body + "]"; i = j + 1
         else:
             out += re.escape(p[i]); i += 1
     # A folder pattern matches everything inside it; any other pattern also matches a folder of that name.
@@ -332,12 +335,15 @@ def github(method, url, token, body=None):
 
 
 def own_login(api, token):
-    """The account our comments are posted as. The workflow's own token can't read /user, and posts as
-    github-actions[bot]; a personal token posts as its owner."""
+    """The account our comments are posted as. The workflow's own token can't read /user (GitHub answers 403)
+    and posts as github-actions[bot]; a personal token posts as its owner. Any other failure is raised, so a
+    network blip can't make us miss our earlier comment and post a second one."""
     try:
         return github("GET", f"{api}/user", token)["login"]
-    except Exception:
-        return "github-actions[bot]"
+    except urllib.error.HTTPError as e:
+        if e.code in (401, 403):
+            return "github-actions[bot]"
+        raise
 
 
 def post(repo, number, body, token, only_update=False):

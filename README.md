@@ -39,7 +39,7 @@ The action needs Python 3.7 or newer, which GitHub's hosted runners have. On a s
 ## What the comment looks like
 
 > ### 🏙 Code City: this PR touches 3 files
-> ⚠️ **2 hotspots**: files changed more often than 90% of the repo's files. Bugs tend to cluster in them, so review these closely.
+> ⚠️ **2 hotspots**: files in the repo's top 10% for how often they change. Bugs tend to cluster in them, so review these closely.
 > 🧪 Code changed but no test files did. Consider adding or updating tests.
 > 👤 **Maya** is the only person who has changed `src/pay.ts` in the last year. They may be the best reviewer.
 >
